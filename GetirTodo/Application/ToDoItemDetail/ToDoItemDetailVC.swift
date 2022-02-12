@@ -36,6 +36,11 @@ final class ToDoItemDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.deleteItemIfEmpty()
+    }
 }
 
 //MARK:- TextField Change Listener

@@ -46,7 +46,16 @@ final class ToDoItemDetailVM {
         } errorHandler: { error in
             print(error)
         }
-        
+    }
+    
+    func checkEmptyItem() -> Bool {
+        return toDoListItem.title == "" && toDoListItem.detail == ""
+    }
+    
+    func deleteItemIfEmpty() {
+        if checkEmptyItem() {
+            RealmManager.shared.deleteObject(object: toDoListItem)
+        }
     }
     
 }
