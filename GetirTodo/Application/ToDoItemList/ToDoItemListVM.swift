@@ -8,5 +8,10 @@
 import Foundation
 
 final class ToDoItemListVM {
+    var toDoItemList: [ToDoListItem] = []
     
+    func getItems(success: () -> Void) {
+        toDoItemList = RealmManager.shared.getAll(type: ToDoListItem.self)
+        success()
+    }
 }

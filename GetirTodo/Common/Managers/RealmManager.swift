@@ -19,7 +19,7 @@ final class RealmManager {
         }
     }
     
-    func getAll<T: Object>(type: T.Type, successHandler: () -> Void) -> [T] {
+    func getAll<T: Object>(type: T.Type) -> [T] {
         return Array(realm.objects(T.self))
     }
     

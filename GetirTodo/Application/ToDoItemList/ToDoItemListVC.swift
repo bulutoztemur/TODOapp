@@ -9,21 +9,54 @@ import UIKit
 
 final class ToDoItemListVC: UIViewController {
 
+    private let viewModel = ToDoItemListVM()
+    
+    @IBOutlet weak var tasksTableView: UITableView! {
+        didSet {
+            tasksTableView.tableFooterView = UIView(frame: .zero)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .cyan
-        // Do any additional setup after loading the view.
+        navigationItem.title = "My Tasks"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTaskButtonTapped))
+        RealmManager.shared.printAll(type: ToDoListItem.self)
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.getItems { [weak self] in
+            self?.tasksTableView.reloadData()
+        }
     }
-    */
+    
+    @objc func addTaskButtonTapped() {
+        navigateToDetailScreen()
+    }
+    
+    func navigateToDetailScreen(detailVC: ToDoItemDetailVC = ToDoItemDetailVC()) {
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+}
 
+extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.toDoItemList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell") else {
+                return UITableViewCell(style: .default, reuseIdentifier: "cell")
+            }
+            return cell
+        }()
+        cell.textLabel?.text = viewModel.toDoItemList[indexPath.row].title
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        navigateToDetailScreen(detailVC: ToDoItemDetailVC(item: viewModel.toDoItemList[indexPath.row]))
+    }
 }
