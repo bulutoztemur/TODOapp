@@ -74,6 +74,62 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		88DDFA3427B8346F0079F8DD /* Common */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		88DDFA3527B834740079F8DD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F72669412590B8DF00AB3034 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		88DDFA3627B8347A0079F8DD /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				88DDFA3A27B834E30079F8DD /* ToDoItemDetail */,
+				88DDFA3927B834C70079F8DD /* ToDoItemList */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		88DDFA3727B834800079F8DD /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				F72669382590B8DE00AB3034 /* AppDelegate.swift */,
+				F726693A2590B8DE00AB3034 /* SceneDelegate.swift */,
+			);
+			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		88DDFA3827B834970079F8DD /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				F72669432590B8DF00AB3034 /* LaunchScreen.storyboard */,
+				F72669462590B8DF00AB3034 /* Info.plist */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		88DDFA3927B834C70079F8DD /* ToDoItemList */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ToDoItemList;
+			sourceTree = "<group>";
+		};
+		88DDFA3A27B834E30079F8DD /* ToDoItemDetail */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ToDoItemDetail;
+			sourceTree = "<group>";
+		};
 		F726692C2590B8DD00AB3034 = {
 			isa = PBXGroup;
 			children = (
@@ -97,12 +153,12 @@
 		F72669372590B8DE00AB3034 /* GetirTodo */ = {
 			isa = PBXGroup;
 			children = (
-				F72669382590B8DE00AB3034 /* AppDelegate.swift */,
-				F726693A2590B8DE00AB3034 /* SceneDelegate.swift */,
+				88DDFA3827B834970079F8DD /* SupportingFiles */,
+				88DDFA3727B834800079F8DD /* AppDelegate */,
+				88DDFA3627B8347A0079F8DD /* Application */,
+				88DDFA3527B834740079F8DD /* Resources */,
+				88DDFA3427B8346F0079F8DD /* Common */,
 				F726693C2590B8DE00AB3034 /* ViewController.swift */,
-				F72669412590B8DF00AB3034 /* Assets.xcassets */,
-				F72669432590B8DF00AB3034 /* LaunchScreen.storyboard */,
-				F72669462590B8DF00AB3034 /* Info.plist */,
 			);
 			path = GetirTodo;
 			sourceTree = "<group>";
@@ -425,7 +481,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = GetirTodo/Info.plist;
+				INFOPLIST_FILE = GetirTodo/SupportingFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -443,7 +499,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = GetirTodo/Info.plist;
+				INFOPLIST_FILE = GetirTodo/SupportingFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
