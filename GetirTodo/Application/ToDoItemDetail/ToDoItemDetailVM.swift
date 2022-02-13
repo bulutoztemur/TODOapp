@@ -31,24 +31,36 @@ final class ToDoItemDetailVM {
     func getDetail() -> String {
         return toDoListItem.detail
     }
-        
-    func updateTodoItem(title: String?, detail: String?) {
-        RealmManager.shared.updateObject {
-            if let title = title {
-                toDoListItem.title = title
-            }
-            
-            if let detail = detail {
-                toDoListItem.detail = detail
-            }
-        } successHandler: {
-            print("UPDATED")
-        } errorHandler: { error in
-            print(error)
+    
+    func updateItemIfNotEmpty(title: String, detail: String) {
+        if isItemEmpty(title, detail) {
+            deleteItem()
+        } else {
+            updateItem(title, detail)
         }
+    }
+
+    private func isItemEmpty(_ title: String, _ detail: String) -> Bool {
+        return title == "" && detail == ""
     }
     
     func deleteItem() {
-        RealmManager.shared.deleteObject(object: toDoListItem)
-    }    
+        RealmManager.shared.deleteObject(object: toDoListItem) {
+            print("DELETED")
+        } errorHandler: { error in
+            print("DELETE ERROR: \(error.localizedDescription)")
+        }
+    }
+        
+    private func updateItem(_ title: String, _ detail: String) {
+        RealmManager.shared.updateObject {
+            toDoListItem.title = title
+            toDoListItem.detail = detail
+
+        } successHandler: {
+            print("UPDATED")
+        } errorHandler: { error in
+            print("UPDATE ERROR: \(error.localizedDescription)")
+        }
+    }
 }

@@ -15,7 +15,11 @@ final class ToDoItemListVM {
     }
     
     func deleteItem(index: Int) {
-        RealmManager.shared.deleteObject(object: toDoItemList[index])
+        RealmManager.shared.deleteObject(object: toDoItemList[index]) {
+            print("DELETED")
+        } errorHandler: { error in
+            print("DELETE ERROR: \(error.localizedDescription)")
+        }
     }
     
     func updateItemStatus(index: Int) {
@@ -24,18 +28,9 @@ final class ToDoItemListVM {
             let currentStatus = self.toDoItemList[index].isDone
             self.toDoItemList[index].isDone = !currentStatus
         } successHandler: {
-            print("Status Updated")
+            print("STATUS UPDATED")
         } errorHandler: { error in
-            print(error.localizedDescription)
+            print("STATUS UPDATE ERROR: \(error.localizedDescription)")
         }
-
-    }
-    
-    func deleteEmptyItems() {
-        RealmManager.shared.getAll(type: ToDoListItem.self)
-            .filter { $0.title == "" && $0.detail == "" }
-            .forEach {
-                RealmManager.shared.deleteObject(object: $0)
-            }
     }
 }

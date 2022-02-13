@@ -13,7 +13,6 @@ final class ToDoItemDetailVC: UIViewController {
     
     @IBOutlet weak var titleTextField: UITextField! {
         didSet {
-            titleTextField.addTarget(self, action: #selector(titleTextFieldDidChange), for: .editingChanged)
             titleTextField.text = viewModel.getTitle()
             titleTextField.becomeFirstResponder()
         }
@@ -39,29 +38,25 @@ final class ToDoItemDetailVC: UIViewController {
         let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteTaskButtonTapped))
         rightBarButtonItem.tintColor = .systemRed
         navigationItem.rightBarButtonItem = rightBarButtonItem
+        
+        let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveTaskButtonTapped))
+        navigationItem.leftBarButtonItem = leftBarButtonItem
     }
         
     @objc func deleteTaskButtonTapped() {
         viewModel.deleteItem()
         navigationController?.popViewController(animated: true)
     }
+    
+    @objc func saveTaskButtonTapped() {
+        viewModel.updateItemIfNotEmpty(title: titleTextField.text ?? "", detail: detailTextView.text ?? "")
+        navigationController?.popViewController(animated: true)
+    }
 }
 
-//MARK:- TextField Change Listener
+//MARK:- TextField Delegate
 extension ToDoItemDetailVC: UITextFieldDelegate {
-    @objc func titleTextFieldDidChange(_ textField: UITextField) {
-        viewModel.updateTodoItem(title: textField.text, detail: nil)
-    }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         detailTextView.becomeFirstResponder()
     }
 }
-
-//MARK:- TextView Change Listener
-extension ToDoItemDetailVC: UITextViewDelegate {
-    func textViewDidChange(_ textView: UITextView) {
-        viewModel.updateTodoItem(title: nil, detail: textView.text)
-    }
-}
-
