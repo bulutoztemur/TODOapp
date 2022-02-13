@@ -25,11 +25,11 @@ final class ToDoItemDetailVM {
     }
     
     func getTitle() -> String {
-        return toDoListItem.title
+        toDoListItem.title
     }
     
     func getDetail() -> String {
-        return toDoListItem.detail
+        toDoListItem.detail
     }
     
     func updateItemIfNotEmpty(title: String, detail: String) {
