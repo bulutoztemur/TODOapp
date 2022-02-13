@@ -38,12 +38,10 @@ final class ToDoItemDetailVM {
     }
     
     func checkAndUpdateItem(title: String, detail: String) {
-        if IsItemChanged(title, detail) {
-            if isItemEmpty(title, detail) {
-                deleteItem()
-            } else {
-                updateItem(title, detail)
-            }
+        if isItemEmpty(title, detail) {
+            deleteItem()
+        } else if IsItemChanged(title, detail) {
+            updateItem(title, detail)
         }
     }
     
