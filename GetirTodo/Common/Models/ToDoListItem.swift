@@ -10,8 +10,16 @@ import RealmSwift
 
 class ToDoListItem: Object {
     @Persisted(primaryKey: true) var primaryKey: UUID = UUID()
-    @Persisted var title: String = ""
-    @Persisted var detail: String = ""
+    @Persisted var title: String = "" {
+        didSet {
+            lastUpdateDate = Date()
+        }
+    }
+    @Persisted var detail: String = "" {
+        didSet {
+            lastUpdateDate = Date()
+        }
+    }
     @Persisted var isDone: Bool = false
     @Persisted var lastUpdateDate: Date = Date()
 }

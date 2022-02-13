@@ -59,6 +59,8 @@ extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let toDoListItem = viewModel.toDoItemList[indexPath.row]
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        cell.textLabel?.font = UIFont(name: "HelveticaNeue-Medium", size: 18.0)
         cell.textLabel?.text = toDoListItem.title
         cell.imageView?.image = toDoListItem.isDone ? UIImage(systemName: "checkmark.circle.fill") : UIImage(systemName: "clock.arrow.circlepath")
         cell.imageView?.tintColor = toDoListItem.isDone ? .systemGreen : .systemOrange
@@ -88,5 +90,5 @@ extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
         changeStatusAction.image = toDoListItem.isDone ? UIImage(systemName: "clock.arrow.circlepath") : UIImage(systemName: "checkmark.circle.fill")
         changeStatusAction.backgroundColor = toDoListItem.isDone ? .systemOrange : .systemGreen
         return UISwipeActionsConfiguration(actions: [changeStatusAction])
-    }
+    }    
 }

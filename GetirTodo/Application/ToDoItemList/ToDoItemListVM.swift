@@ -12,6 +12,8 @@ final class ToDoItemListVM {
         
     func getItems() {
         toDoItemList = RealmManager.shared.getAll(type: ToDoListItem.self)
+            .sorted(byKeyPath: "lastUpdateDate", ascending: false)
+            .toArray(ofType: ToDoListItem.self)
     }
     
     func deleteItem(index: Int) {
@@ -34,3 +36,4 @@ final class ToDoItemListVM {
         }
     }
 }
+
