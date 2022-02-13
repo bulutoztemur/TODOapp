@@ -45,7 +45,7 @@ final class RealmManager {
         }
     }
     
-    func deleteObject<T: Object>(object: T, successHandler: () -> Void = {}, errorHandler: (Error) -> Void = { _ in }) {
+    func deleteObject<T: Object>(object: T, successHandler: () -> Void, errorHandler: (Error) -> Void) {
         do {
             try realm.write {
                 realm.delete(object)

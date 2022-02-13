@@ -25,37 +25,42 @@ final class ToDoItemDetailVM {
     }
     
     func getTitle() -> String {
-        return toDoListItem.title
+        toDoListItem.title
     }
     
     func getDetail() -> String {
-        return toDoListItem.detail
+        toDoListItem.detail
+    }
+    
+    func updateItemIfNotEmpty(title: String, detail: String) {
+        if isItemEmpty(title, detail) {
+            deleteItem()
+        } else {
+            updateItem(title, detail)
+        }
+    }
+
+    private func isItemEmpty(_ title: String, _ detail: String) -> Bool {
+        return title == "" && detail == ""
+    }
+    
+    func deleteItem() {
+        RealmManager.shared.deleteObject(object: toDoListItem) {
+            print("DELETED")
+        } errorHandler: { error in
+            print("DELETE ERROR: \(error.localizedDescription)")
+        }
     }
         
-    func updateTodoItem(title: String?, detail: String?) {
+    private func updateItem(_ title: String, _ detail: String) {
         RealmManager.shared.updateObject {
-            if let title = title {
-                toDoListItem.title = title
-            }
-            
-            if let detail = detail {
-                toDoListItem.detail = detail
-            }
+            toDoListItem.title = title
+            toDoListItem.detail = detail
+
         } successHandler: {
             print("UPDATED")
         } errorHandler: { error in
-            print(error)
+            print("UPDATE ERROR: \(error.localizedDescription)")
         }
     }
-    
-    func checkEmptyItem() -> Bool {
-        return toDoListItem.title == "" && toDoListItem.detail == ""
-    }
-    
-    func deleteItemIfEmpty() {
-        if checkEmptyItem() {
-            RealmManager.shared.deleteObject(object: toDoListItem)
-        }
-    }
-    
 }
