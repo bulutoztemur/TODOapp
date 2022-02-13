@@ -51,7 +51,10 @@ extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = viewModel.toDoItemList[indexPath.row].title
+        let toDoListItem = viewModel.toDoItemList[indexPath.row]
+        cell.textLabel?.text = toDoListItem.title
+        cell.imageView?.image = toDoListItem.isDone ? UIImage(systemName: "checkmark.circle.fill") : UIImage(systemName: "clock.arrow.circlepath")
+        cell.imageView?.tintColor = toDoListItem.isDone ? .systemGreen : .systemOrange
         return cell
     }
     
@@ -60,12 +63,23 @@ extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] (_, _, _) in
+        let deleteAction = UIContextualAction(style: .normal, title: nil) { [weak self] (_, _, _) in
             self?.viewModel.deleteItem(index: indexPath.row)
             self?.refreshTableView()
         }
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .systemRed
         return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let toDoListItem = viewModel.toDoItemList[indexPath.row]
+        let changeStatusAction = UIContextualAction(style: .normal, title: nil) { [weak self] (_, _, _) in
+            self?.viewModel.updateItemStatus(index: indexPath.row)
+            self?.refreshTableView()
+        }
+        changeStatusAction.image = toDoListItem.isDone ? UIImage(systemName: "clock.arrow.circlepath") : UIImage(systemName: "checkmark.circle.fill")
+        changeStatusAction.backgroundColor = toDoListItem.isDone ? .systemOrange : .systemGreen
+        return UISwipeActionsConfiguration(actions: [changeStatusAction])
     }
 }
