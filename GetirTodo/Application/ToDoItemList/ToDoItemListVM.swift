@@ -11,15 +11,18 @@ final class ToDoItemListVM {
     var toDoItemList: [ToDoListItem] = []
     
     init() {
-        removeEmptyItems()
+        deleteEmptyItems()
     }
     
-    func getItems(success: () -> Void) {
+    func getItems() {
         toDoItemList = RealmManager.shared.getAll(type: ToDoListItem.self)
-        success()
     }
     
-    private func removeEmptyItems() {
+    func deleteItem(index: Int) {
+        RealmManager.shared.deleteObject(object: toDoItemList[index])
+    }
+    
+    private func deleteEmptyItems() {
         RealmManager.shared.getAll(type: ToDoListItem.self)
             .filter { $0.title == "" && $0.detail == "" }
             .forEach {

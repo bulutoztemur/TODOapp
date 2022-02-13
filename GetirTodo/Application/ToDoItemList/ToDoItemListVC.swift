@@ -14,6 +14,7 @@ final class ToDoItemListVC: UIViewController {
     @IBOutlet weak var tasksTableView: UITableView! {
         didSet {
             tasksTableView.tableFooterView = UIView(frame: .zero)
+            tasksTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         }
     }
     
@@ -26,9 +27,7 @@ final class ToDoItemListVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.getItems { [weak self] in
-            self?.tasksTableView.reloadData()
-        }
+        refreshTableView()
     }
     
     @objc func addTaskButtonTapped() {
@@ -38,6 +37,11 @@ final class ToDoItemListVC: UIViewController {
     func navigateToDetailScreen(detailVC: ToDoItemDetailVC = ToDoItemDetailVC()) {
         navigationController?.pushViewController(detailVC, animated: true)
     }
+    
+    private func refreshTableView() {
+        viewModel.getItems()
+        tasksTableView.reloadData()
+    }
 }
 
 extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
@@ -46,17 +50,22 @@ extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell") else {
-                return UITableViewCell(style: .default, reuseIdentifier: "cell")
-            }
-            return cell
-        }()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = viewModel.toDoItemList[indexPath.row].title
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         navigateToDetailScreen(detailVC: ToDoItemDetailVC(item: viewModel.toDoItemList[indexPath.row]))
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] (_, _, _) in
+            self?.viewModel.deleteItem(index: indexPath.row)
+            self?.refreshTableView()
+        }
+        deleteAction.image = UIImage(systemName: "trash")
+        deleteAction.backgroundColor = .systemRed
+        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 }
