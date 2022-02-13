@@ -12,6 +12,7 @@ class ToDoListItem: Object {
     @Persisted(primaryKey: true) var primaryKey: UUID = UUID()
     @Persisted var title: String = ""
     @Persisted var detail: String = ""
+    @Persisted var isDone: Bool = false
     @Persisted var lastUpdateDate: Date = Date()
 }
 
