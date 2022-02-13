@@ -19,8 +19,8 @@ final class RealmManager {
         }
     }
     
-    func getAll<T: Object>(type: T.Type) -> [T] {
-        return Array(realm.objects(T.self))
+    func getAll<T: Object>(type: T.Type) -> Results<T> {
+        return realm.objects(T.self)
     }
     
     func addObject<T: Object>(object: T, successHandler: () -> Void, errorHandler: (Error) -> Void) {
@@ -60,5 +60,3 @@ final class RealmManager {
         print(realm.objects(T.self))
     }
 }
-
-

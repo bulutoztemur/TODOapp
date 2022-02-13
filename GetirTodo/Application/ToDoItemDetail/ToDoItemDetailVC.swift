@@ -52,6 +52,11 @@ private extension ToDoItemDetailVC {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveTaskButtonTapped))
     }
     
+    @objc func saveTaskButtonTapped() {
+        viewModel.checkAndUpdateItem(title: titleTextField.text ?? "", detail: detailTextView.text ?? "")
+        navigationController?.popViewController(animated: true)
+    }
+    
     func createRightBarButtonItem() {
         let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteTaskButtonTapped))
         rightBarButtonItem.tintColor = .systemRed
@@ -60,11 +65,6 @@ private extension ToDoItemDetailVC {
         
     @objc func deleteTaskButtonTapped() {
         viewModel.deleteItem()
-        navigationController?.popViewController(animated: true)
-    }
-    
-    @objc func saveTaskButtonTapped() {
-        viewModel.updateItemIfNotEmpty(title: titleTextField.text ?? "", detail: detailTextView.text ?? "")
         navigationController?.popViewController(animated: true)
     }
 }

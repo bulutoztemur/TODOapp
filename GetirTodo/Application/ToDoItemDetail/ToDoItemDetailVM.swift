@@ -9,18 +9,23 @@ import Foundation
 
 final class ToDoItemDetailVM {
     private let toDoListItem: ToDoListItem
+    private let initialTitle: String
+    private let inititalDetail: String
     
     init(item: ToDoListItem?) {
         if let item = item {
             self.toDoListItem = item
+            self.initialTitle = item.title
+            self.inititalDetail = item.detail
         } else {
             self.toDoListItem = ToDoListItem()
             RealmManager.shared.addObject(object: toDoListItem) {
-                print("ADDED")
+                print("\(Constants.Strings.addedSuccessfully)")
             } errorHandler: { error in
-                print(error)
+                print("\(Constants.Strings.addedSuccessfully): \(error.localizedDescription)")
             }
-
+            self.initialTitle = ""
+            self.inititalDetail = ""
         }
     }
     
@@ -32,12 +37,16 @@ final class ToDoItemDetailVM {
         toDoListItem.detail
     }
     
-    func updateItemIfNotEmpty(title: String, detail: String) {
+    func checkAndUpdateItem(title: String, detail: String) {
         if isItemEmpty(title, detail) {
             deleteItem()
-        } else {
+        } else if IsItemChanged(title, detail) {
             updateItem(title, detail)
         }
+    }
+    
+    private func IsItemChanged(_ title: String, _ detail: String) -> Bool {
+        return initialTitle != title || inititalDetail != detail
     }
 
     private func isItemEmpty(_ title: String, _ detail: String) -> Bool {
@@ -46,9 +55,9 @@ final class ToDoItemDetailVM {
     
     func deleteItem() {
         RealmManager.shared.deleteObject(object: toDoListItem) {
-            print("DELETED")
+            print("\(Constants.Strings.deletedSuccessfully)")
         } errorHandler: { error in
-            print("DELETE ERROR: \(error.localizedDescription)")
+            print("\(Constants.Strings.deleteFailed): \(error.localizedDescription)")
         }
     }
         
@@ -56,11 +65,10 @@ final class ToDoItemDetailVM {
         RealmManager.shared.updateObject {
             toDoListItem.title = title
             toDoListItem.detail = detail
-
         } successHandler: {
-            print("UPDATED")
+            print("\(Constants.Strings.updatedSuccessfully)")
         } errorHandler: { error in
-            print("UPDATE ERROR: \(error.localizedDescription)")
+            print("\(Constants.Strings.updateFailed): \(error.localizedDescription)")
         }
     }
 }
