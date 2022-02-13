@@ -14,7 +14,7 @@ final class ToDoItemListVC: UIViewController {
     @IBOutlet weak var tasksTableView: UITableView! {
         didSet {
             tasksTableView.tableFooterView = UIView(frame: .zero)
-            tasksTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+            tasksTableView.register(cellClass: UITableViewCell.self)
         }
     }
     
@@ -32,7 +32,7 @@ final class ToDoItemListVC: UIViewController {
 //MARK:- Navigation Bar Configuration
 private extension ToDoItemListVC {
     func configureNavigationBar() {
-        navigationItem.title = "My Tasks"
+        navigationItem.title = Constants.Strings.myTasksTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTaskButtonTapped))
     }
     
@@ -57,7 +57,7 @@ extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.reuseIdentifier, for: indexPath)
         let toDoListItem = viewModel.toDoItemList[indexPath.row]
         cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         cell.textLabel?.font = UIFont(name: "HelveticaNeue-Medium", size: 18.0)

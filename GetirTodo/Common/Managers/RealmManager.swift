@@ -60,9 +60,3 @@ final class RealmManager {
         print(realm.objects(T.self))
     }
 }
-
-extension Results {
-  func toArray<T>(ofType: T.Type) -> [T] {
-    return self.compactMap{$0 as? T}
-  }
-}

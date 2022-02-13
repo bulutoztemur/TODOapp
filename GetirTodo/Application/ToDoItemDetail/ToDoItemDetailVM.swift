@@ -20,9 +20,9 @@ final class ToDoItemDetailVM {
         } else {
             self.toDoListItem = ToDoListItem()
             RealmManager.shared.addObject(object: toDoListItem) {
-                print("ADDED")
+                print("\(Constants.Strings.addedSuccessfully)")
             } errorHandler: { error in
-                print(error)
+                print("\(Constants.Strings.addedSuccessfully): \(error.localizedDescription)")
             }
             self.initialTitle = ""
             self.inititalDetail = ""
@@ -57,9 +57,9 @@ final class ToDoItemDetailVM {
     
     func deleteItem() {
         RealmManager.shared.deleteObject(object: toDoListItem) {
-            print("DELETED")
+            print("\(Constants.Strings.deletedSuccessfully)")
         } errorHandler: { error in
-            print("DELETE ERROR: \(error.localizedDescription)")
+            print("\(Constants.Strings.deleteFailed): \(error.localizedDescription)")
         }
     }
         
@@ -68,9 +68,9 @@ final class ToDoItemDetailVM {
             toDoListItem.title = title
             toDoListItem.detail = detail
         } successHandler: {
-            print("UPDATED")
+            print("\(Constants.Strings.updatedSuccessfully)")
         } errorHandler: { error in
-            print("UPDATE ERROR: \(error.localizedDescription)")
+            print("\(Constants.Strings.updateFailed): \(error.localizedDescription)")
         }
     }
 }
