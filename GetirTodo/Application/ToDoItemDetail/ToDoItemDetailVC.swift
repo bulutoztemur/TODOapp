@@ -15,6 +15,7 @@ final class ToDoItemDetailVC: UIViewController {
         didSet {
             titleTextField.addTarget(self, action: #selector(titleTextFieldDidChange), for: .editingChanged)
             titleTextField.text = viewModel.getTitle()
+            titleTextField.becomeFirstResponder()
         }
     }
     
@@ -35,18 +36,25 @@ final class ToDoItemDetailVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteTaskButtonTapped))
+        rightBarButtonItem.tintColor = .systemRed
+        navigationItem.rightBarButtonItem = rightBarButtonItem
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        viewModel.deleteItemIfEmpty()
+        
+    @objc func deleteTaskButtonTapped() {
+        viewModel.deleteItem()
+        navigationController?.popViewController(animated: true)
     }
 }
 
 //MARK:- TextField Change Listener
-extension ToDoItemDetailVC {
+extension ToDoItemDetailVC: UITextFieldDelegate {
     @objc func titleTextFieldDidChange(_ textField: UITextField) {
         viewModel.updateTodoItem(title: textField.text, detail: nil)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        detailTextView.becomeFirstResponder()
     }
 }
 

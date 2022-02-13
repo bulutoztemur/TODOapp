@@ -9,11 +9,7 @@ import Foundation
 
 final class ToDoItemListVM {
     var toDoItemList: [ToDoListItem] = []
-    
-    init() {
-        deleteEmptyItems()
-    }
-    
+        
     func getItems() {
         toDoItemList = RealmManager.shared.getAll(type: ToDoListItem.self)
     }
@@ -35,7 +31,7 @@ final class ToDoItemListVM {
 
     }
     
-    private func deleteEmptyItems() {
+    func deleteEmptyItems() {
         RealmManager.shared.getAll(type: ToDoListItem.self)
             .filter { $0.title == "" && $0.detail == "" }
             .forEach {
