@@ -14,7 +14,6 @@ final class ToDoItemDetailVC: UIViewController {
     @IBOutlet weak var titleTextField: UITextField! {
         didSet {
             titleTextField.text = viewModel.getTitle()
-            titleTextField.becomeFirstResponder()
         }
     }
     
@@ -23,6 +22,8 @@ final class ToDoItemDetailVC: UIViewController {
             detailTextView.text = viewModel.getDetail()
         }
     }
+    
+    @IBOutlet weak var detailTextViewBottomConstraint: NSLayoutConstraint!
     
     init(item: ToDoListItem? = nil) {
         self.viewModel = ToDoItemDetailVM(item: item)
@@ -35,12 +36,26 @@ final class ToDoItemDetailVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        addKeyboardObservers()
+        configureNavigationBar()
+    }
+}
+
+//MARK:- Navigation Bar Configuration
+private extension ToDoItemDetailVC {
+    func configureNavigationBar() {
+        createLeftBarButtonItem()
+        createRightBarButtonItem()
+    }
+    
+    func createLeftBarButtonItem() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveTaskButtonTapped))
+    }
+    
+    func createRightBarButtonItem() {
         let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteTaskButtonTapped))
         rightBarButtonItem.tintColor = .systemRed
         navigationItem.rightBarButtonItem = rightBarButtonItem
-        
-        let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveTaskButtonTapped))
-        navigationItem.leftBarButtonItem = leftBarButtonItem
     }
         
     @objc func deleteTaskButtonTapped() {
@@ -58,5 +73,32 @@ final class ToDoItemDetailVC: UIViewController {
 extension ToDoItemDetailVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         detailTextView.becomeFirstResponder()
+    }
+}
+
+//MARK:- Keyboard Observation
+private extension ToDoItemDetailVC {
+    func addKeyboardObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillDisapper),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            detailTextViewBottomConstraint.constant = keyboardHeight
+        }
+    }
+    
+    @objc func keyboardWillDisapper(_ notification: Notification) {
+        detailTextViewBottomConstraint.constant = 0
     }
 }
