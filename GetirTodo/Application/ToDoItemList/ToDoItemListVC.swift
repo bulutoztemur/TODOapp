@@ -18,6 +18,8 @@ final class ToDoItemListVC: UIViewController {
         }
     }
     
+    @IBOutlet weak var noDataView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavigationBar()
@@ -26,6 +28,11 @@ final class ToDoItemListVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshTableView()
+    }
+    
+    private func checkNoData() {
+        tasksTableView.isHidden = viewModel.toDoItemList.isEmpty
+        noDataView.isHidden = !viewModel.toDoItemList.isEmpty
     }
 }
 
@@ -49,6 +56,7 @@ private extension ToDoItemListVC {
 extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
     private func refreshTableView() {
         viewModel.getItems()
+        checkNoData()
         tasksTableView.reloadData()
     }
 
