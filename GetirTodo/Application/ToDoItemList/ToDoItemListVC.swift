@@ -20,14 +20,20 @@ final class ToDoItemListVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "My Tasks"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTaskButtonTapped))
-        RealmManager.shared.printAll(type: ToDoListItem.self)
+        configureNavigationBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshTableView()
+    }
+}
+
+//MARK:- Navigation Bar Configuration
+private extension ToDoItemListVC {
+    func configureNavigationBar() {
+        navigationItem.title = "My Tasks"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTaskButtonTapped))
     }
     
     @objc func addTaskButtonTapped() {
@@ -37,14 +43,15 @@ final class ToDoItemListVC: UIViewController {
     func navigateToDetailScreen(detailVC: ToDoItemDetailVC = ToDoItemDetailVC()) {
         navigationController?.pushViewController(detailVC, animated: true)
     }
-    
+}
+
+//MARK:- TableView Operations
+extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
     private func refreshTableView() {
         viewModel.getItems()
         tasksTableView.reloadData()
     }
-}
 
-extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.toDoItemList.count
     }
