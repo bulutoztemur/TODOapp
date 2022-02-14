@@ -81,8 +81,11 @@ extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .normal, title: nil) { [weak self] (_, _, _) in
-            self?.viewModel.deleteItem(index: indexPath.row)
-            self?.refreshTableView()
+            self?.viewModel.deleteItem(index: indexPath.row) {
+                self?.refreshTableView()
+            } errorHandler: { error in
+                self?.showAlert(withTitle: Constants.Strings.deleteFailed, message: error.localizedDescription)
+            }
         }
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .systemRed
@@ -92,8 +95,11 @@ extension ToDoItemListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let toDoListItem = viewModel.toDoItemList[indexPath.row]
         let changeStatusAction = UIContextualAction(style: .normal, title: nil) { [weak self] (_, _, _) in
-            self?.viewModel.updateItemStatus(index: indexPath.row)
-            self?.refreshTableView()
+            self?.viewModel.updateItemStatus(index: indexPath.row) {
+                self?.refreshTableView()
+            } errorHandler: { error in
+                self?.showAlert(withTitle: Constants.Strings.statusUpdateFailed, message: error.localizedDescription)
+            }
         }
         changeStatusAction.image = toDoListItem.isDone ? UIImage(systemName: "clock.arrow.circlepath") : UIImage(systemName: "checkmark.circle.fill")
         changeStatusAction.backgroundColor = toDoListItem.isDone ? .systemOrange : .systemGreen

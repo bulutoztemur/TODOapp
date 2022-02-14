@@ -53,8 +53,11 @@ private extension ToDoItemDetailVC {
     }
     
     @objc func saveTaskButtonTapped() {
-        viewModel.checkAndUpdateItem(title: titleTextField.text ?? "", detail: detailTextView.text ?? "")
-        navigationController?.popViewController(animated: true)
+        viewModel.checkAndUpdateItem(title: titleTextField.text ?? "", detail: detailTextView.text ?? "") { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        } errorHandler: { [weak self] error in
+            self?.showAlert(withTitle: Constants.Strings.updateFailed, message: error.localizedDescription)
+        }
     }
     
     func createRightBarButtonItem() {
@@ -64,8 +67,11 @@ private extension ToDoItemDetailVC {
     }
         
     @objc func deleteTaskButtonTapped() {
-        viewModel.deleteItem()
-        navigationController?.popViewController(animated: true)
+        viewModel.deleteItem { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        } errorHandler: { [weak self] error in
+            self?.showAlert(withTitle: Constants.Strings.deleteFailed, message: error.localizedDescription)
+        }
     }
 }
 
