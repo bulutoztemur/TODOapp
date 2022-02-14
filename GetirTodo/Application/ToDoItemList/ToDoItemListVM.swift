@@ -16,23 +16,23 @@ final class ToDoItemListVM {
             .toArray(ofType: ToDoListItem.self)
     }
     
-    func deleteItem(index: Int) {
+    func deleteItem(index: Int, successHandler: () -> Void, errorHandler: (Error) -> Void) {
         RealmManager.shared.deleteObject(object: toDoItemList[index]) {
-            print("\(Constants.Strings.deletedSuccessfully)")
+            successHandler()
         } errorHandler: { error in
-            print("\(Constants.Strings.deleteFailed): \(error.localizedDescription)")
+            errorHandler(error)
         }
     }
     
-    func updateItemStatus(index: Int) {
+    func updateItemStatus(index: Int, successHandler: () -> Void, errorHandler: (Error) -> Void) {
         RealmManager.shared.updateObject { [weak self] in
             guard let self = self else { return }
             let currentStatus = self.toDoItemList[index].isDone
             self.toDoItemList[index].isDone = !currentStatus
         } successHandler: {
-            print("\(Constants.Strings.statusUpdatedSuccessfully)")
+            successHandler()
         } errorHandler: { error in
-            print("\(Constants.Strings.statusUpdateFailed): \(error.localizedDescription)")
+            errorHandler(error)
         }
     }
 }

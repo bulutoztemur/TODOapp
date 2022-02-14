@@ -22,7 +22,7 @@ final class ToDoItemDetailVM {
             RealmManager.shared.addObject(object: toDoListItem) {
                 print("\(Constants.Strings.addedSuccessfully)")
             } errorHandler: { error in
-                print("\(Constants.Strings.addedSuccessfully): \(error.localizedDescription)")
+                print("\(Constants.Strings.addFailed): \(error.localizedDescription)")
             }
             self.initialTitle = ""
             self.inititalDetail = ""
@@ -37,12 +37,15 @@ final class ToDoItemDetailVM {
         toDoListItem.detail
     }
     
-    func checkAndUpdateItem(title: String, detail: String) {
+    func checkAndUpdateItem(title: String, detail: String, successHandler: () -> Void, errorHandler: (Error) -> Void) {
         if isItemEmpty(title, detail) {
-            deleteItem()
+            deleteItem(successHandler: successHandler, errorHandler: errorHandler)
         } else if IsItemChanged(title, detail) {
-            updateItem(title, detail)
+            updateItem(title, detail, successHandler: successHandler, errorHandler: errorHandler)
+        } else {
+            successHandler()
         }
+        
     }
     
     private func IsItemChanged(_ title: String, _ detail: String) -> Bool {
@@ -53,22 +56,22 @@ final class ToDoItemDetailVM {
         return title == "" && detail == ""
     }
     
-    func deleteItem() {
+    func deleteItem(successHandler: () -> Void, errorHandler: (Error) -> Void) {
         RealmManager.shared.deleteObject(object: toDoListItem) {
-            print("\(Constants.Strings.deletedSuccessfully)")
+            successHandler()
         } errorHandler: { error in
-            print("\(Constants.Strings.deleteFailed): \(error.localizedDescription)")
+            errorHandler(error)
         }
     }
         
-    private func updateItem(_ title: String, _ detail: String) {
+    private func updateItem(_ title: String, _ detail: String, successHandler: () -> Void, errorHandler: (Error) -> Void) {
         RealmManager.shared.updateObject {
             toDoListItem.title = title
             toDoListItem.detail = detail
         } successHandler: {
-            print("\(Constants.Strings.updatedSuccessfully)")
+            successHandler()
         } errorHandler: { error in
-            print("\(Constants.Strings.updateFailed): \(error.localizedDescription)")
+            errorHandler(error)
         }
     }
 }
